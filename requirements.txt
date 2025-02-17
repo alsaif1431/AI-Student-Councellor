@@ -1,0 +1,13 @@
+beautifulsoup4==4.12.2
+folium==0.15.1
+google==3.0.0
+langchain==0.0.352
+matplotlib==3.8.2
+openai==1.6.1
+python-dotenv==1.0.0
+requests==2.31.0
+streamlit==1.29.0
+streamlit-folium==0.18.0
+streamlit-markmap==1.0.1
+yfinance==0.2.33
+pillow==10.2.0
