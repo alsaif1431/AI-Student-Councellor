@@ -12,7 +12,8 @@ To get started with the AI Career Counselor, follow these steps:
 1. Clone the repository to your local machine:
    ```bash
    git clone https://github.com/your-username/ai-career-counselor.git
-   cd ai-carrer-counselor   
+   cd ai-carrer-counselor
+   ```
 
 2. Install all the necessary Packages.
     pip install -r requirements.txt
