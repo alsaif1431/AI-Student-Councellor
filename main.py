@@ -108,7 +108,6 @@ system_message = SystemMessage(
     """
 )
 
-from student_councellor.utils import Groq_Client
 if len(msgs.messages) == 0:
     msgs.add_ai_message(
         "Hello there, I am the AI Career Counselor. How can I help you?"
