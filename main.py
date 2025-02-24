@@ -9,9 +9,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain.schema import SystemMessage
 from langchain.prompts import MessagesPlaceholder
-from student_councellor.utils import Groq_Client
-from student_councellor.prompt import template
-
 
 # Get API key from Streamlit secrets
 api_key = st.secrets.get("OPENAI_API_KEY")
@@ -50,11 +47,9 @@ st.sidebar.markdown(
     """
 )
 
-
 async def generate_response(question):
     result = await open_ai_agent.arun(question)
     return result
-
 
 st.title("AI Career Counselor 👩🏻‍🏫")
 stop = False
@@ -62,7 +57,7 @@ stop = False
 if api_key:
     success_message_html = """
     <span style='color:green; font-weight:bold;'>
-        ✅ Powering the Chatbot using Open AI's 
+        ✅ Powering the Chatbot using Groq's 
         <a href='https://console.groq.com' target='_blank'>Llama 3.3 model</a>!
     </span>
     """
@@ -95,9 +90,25 @@ msgs = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=msgs, return_messages=True)
 
 system_message = SystemMessage(
-    content=template
+    content="""
+        You are an expert student counselor who will guide and
+        assist students in their career paths.
+
+        Based on the user question, suggest the best resources and insights 
+        after performing relevant Google searches.
+
+        Your sole purpose is to assist students in making the best decisions 
+        for their careers. Provide specific, precise, and truthful answers in markdown format.
+        
+        If a user greets you, simply greet back with a short message like "Thanks for asking".
+        
+        If asked your name, respond with "AI career counselor" and remember to say "Thanks for asking" at the end of your answer.
+        
+        Always return the source link of the answer at the end and avoid duplicate links.
+    """
 )
 
+from student_councellor.utils import Groq_Client
 if len(msgs.messages) == 0:
     msgs.add_ai_message(
         "Hello there, I am the AI Career Counselor. How can I help you?"
