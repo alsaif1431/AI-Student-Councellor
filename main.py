@@ -1,4 +1,4 @@
-from student_councellor.tools import StoriesTool,CommentsTool,ContentTool
+from student_councellor.tools import StoriesTool, CommentsTool, ContentTool
 import asyncio
 from PIL import Image
 import streamlit as st
@@ -9,13 +9,14 @@ from langchain.memory import ConversationBufferMemory
 from langchain.memory import StreamlitChatMessageHistory
 from langchain.schema import SystemMessage
 from langchain.prompts import MessagesPlaceholder
-# from langchain_openai import ChatOpenAI
 
-api_key = st.secrets["OPENAI_API_KEY"]
+
+api_key = st.secrets.get("OPENAI_API_KEY")
 
 if api_key is None:
     raise ValueError(
-        "OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
+        "OpenAI API key not found. Please set the GROQ_API_KEY environment variable."
+    )
 
 favicon = Image.open("favicon.png")
 
@@ -23,7 +24,7 @@ st.set_page_config(
     page_title="GenAI Demo | Trigent AXLR8 Labs",
     page_icon=favicon,
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
 # Sidebar Logo
@@ -44,29 +45,30 @@ async def generate_response(question):
     result = await open_ai_agent.arun(question)
     return result
 
+
 st.title("Ai carrer councellor 👩🏻‍🏫")
 stop = False
 
 if api_key:
     success_message_html = """
     <span style='color:green; font-weight:bold;'>✅ Powering the Chatbot using Open AI's 
-    <a href='https://platform.openai.com/docs/models/gpt-3-5' target='_blank'>gpt-3.5-turbo-0613 model</a>!</span>
+    <a href='https://console.groq.com' target='_blank'>Llama 3.3 model</a>!</span>
     """
 
     # Display the success message with the link
     st.markdown(success_message_html, unsafe_allow_html=True)
     openai_api_key = api_key
 else:
-    openai_api_key = st.text_input(
-        'Enter your OPENAI_API_KEY: ', type='password')
+    openai_api_key = st.text_input("Enter your GROQ_API_KEY: ", type="password")
     if not openai_api_key:
-        st.warning('Please, enter your OPENAI_API_KEY', icon='⚠️')
+        st.warning("Please, enter your GROQ_API_KEY", icon="⚠️")
         stop = True
     else:
-        st.success('Ask Ai career councellor about guidance!', icon='👉')
+        st.success("Ask Ai career councellor about guidance!", icon="👉")
 
 
-st.markdown("""
+st.markdown(
+    """
 # *Ask me about* :
 1. **Top colleges in your state.**
 2. **Top courses to pursue based on your academics.**
@@ -74,8 +76,8 @@ st.markdown("""
 4. **What networking strategies can I employ to build a strong professional network?**
 5. **What is the importance of continuous learning in today's evolving job landscape?**
 
-""")
-
+"""
+)
 
 
 if stop:
@@ -86,7 +88,8 @@ tools = [StoriesTool(), CommentsTool(), ContentTool()]
 msgs = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=msgs, return_messages=True)
 
-system_message = SystemMessage(content="""
+system_message = SystemMessage(
+    content="""
         You are an expert student counselor who will guide and
         assist students in their career paths.
 
@@ -111,25 +114,28 @@ system_message = SystemMessage(content="""
 
         Remember to return the source link of the answer at the end and don't add
         duplicate sources link.
-""")
+"""
+)
+from student_councellor.utils import Groq_Client
 
 if len(msgs.messages) == 0:
     msgs.add_ai_message(
-        "Hello there, I am the Ai Career councellor. How can I help you?")
+        "Hello there, I am the Ai Career councellor. How can I help you?"
+    )
 
-llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613",
-                 openai_api_key=openai_api_key)
+llm = ChatOpenAI()
 agent_kwargs = {
     "system_message": system_message,
-    "extra_prompt_messages": [MessagesPlaceholder(variable_name="history")]
+    "extra_prompt_messages": [MessagesPlaceholder(variable_name="history")],
 }
-open_ai_agent = initialize_agent(tools,
-                                 llm,
-                                 agent=AgentType.OPENAI_FUNCTIONS,
-                                 agent_kwargs=agent_kwargs,
-                                 verbose=True,
-                                 memory=memory
-                                 )
+open_ai_agent = initialize_agent(
+    tools,
+    llm,
+    agent=AgentType.OPENAI_FUNCTIONS,
+    agent_kwargs=agent_kwargs,
+    verbose=True,
+    memory=memory,
+)
 
 for msg in msgs.messages:
     st.chat_message(msg.type).write(msg.content)

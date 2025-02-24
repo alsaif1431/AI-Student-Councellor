@@ -10,8 +10,8 @@ from .functions import get_story_content
 
 
 class StoriesTool(BaseTool):
-    name = "get_stories"
-    description = (
+    name: str = "get_stories"
+    description: str = (
         "Gets stories from Hacker News. The stories are described by \
         a 'story_id', a 'title', a 'url' and"
         " a 'score'."
@@ -31,8 +31,8 @@ class StoriesTool(BaseTool):
 
 
 class CommentsTool(BaseTool):
-    name = "get_comments"
-    description = "Gets comments from a specific Hacker News story"
+    name: str = "get_comments"
+    description: str = "Gets comments from a specific Hacker News story"
 
     def _run(self, story_id: int, limit: int = 10):
         comments = get_relevant_comments(story_id, limit)
@@ -46,8 +46,8 @@ class CommentsTool(BaseTool):
 
 
 class ContentTool(BaseTool):
-    name = "get_content"
-    description = "Gets the Hacker News story content from a URL"
+    name: str = "get_content"
+    description: str = "Gets the Hacker News story content from a URL"
 
     def _run(self, story_url: str):
         story_content = get_story_content(story_url)
