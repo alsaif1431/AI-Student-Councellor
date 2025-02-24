@@ -2,11 +2,11 @@ from student_councellor.tools import StoriesTool, CommentsTool, ContentTool
 import asyncio
 from PIL import Image
 import streamlit as st
-from langchain.agents import AgentType
-from langchain.agents import initialize_agent
-from langchain.chat_models import ChatOpenAI
+from langchain.agents.agent_types import AgentType
+from langchain.agents.initialize import initialize_agent
+from langchain_community.chat_models.openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
-from langchain.memory import StreamlitChatMessageHistory
+from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain.schema import SystemMessage
 from langchain.prompts import MessagesPlaceholder
 
@@ -15,7 +15,7 @@ api_key = st.secrets.get("OPENAI_API_KEY")
 
 if api_key is None:
     raise ValueError(
-        "OpenAI API key not found. Please set the GROQ_API_KEY environment variable."
+        "Groq API key not found. Please set the GROQ_API_KEY environment variable."
     )
 
 favicon = Image.open("favicon.png")
