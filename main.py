@@ -9,36 +9,46 @@ from langchain.memory import ConversationBufferMemory
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain.schema import SystemMessage
 from langchain.prompts import MessagesPlaceholder
+from student_councellor.utils import Groq_Client
+from student_councellor.prompt import template
 
 
+# Get API key from Streamlit secrets
 api_key = st.secrets.get("OPENAI_API_KEY")
 
 if api_key is None:
     raise ValueError(
-        "Groq API key not found. Please set the GROQ_API_KEY environment variable."
+        "API key not found. Please set the OPENAI_API_KEY environment variable."
     )
 
-favicon = Image.open("favicon.png")
-
+# Update page configuration with a generic title and favicon
 st.set_page_config(
-    page_title="GenAI Demo | Trigent AXLR8 Labs",
-    page_icon=favicon,
+    page_title="AI Career Counselor",
+    page_icon="👔",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Sidebar Logo
-logo_html = """
-<style>
-    [data-testid="stSidebarNav"] {
-        background-image: url(https://trigent.com/wp-content/uploads/Trigent_Axlr8_Labs.png);
-        background-repeat: no-repeat;
-        background-position: 20px 20px;
-        background-size: 80%;
-    }
-</style>
-"""
-st.sidebar.markdown(logo_html, unsafe_allow_html=True)
+# Sidebar: add content about the app along with contact details
+st.sidebar.markdown(
+    """
+    ## About the App
+    Welcome to the **AI Career Counselor**! This virtual tool assists students in exploring potential career paths, identifying their strengths, and making informed academic and professional decisions. 
+      
+    **Features:**
+    - Answers queries on top colleges, courses, and educational paths.
+    - Provides networking strategies and insights on continuous learning.
+    - Integrates multiple AI models and agents to deliver comprehensive guidance.
+      
+    For more details or to view the source code, visit the [Repository](https://github.com/alsaif1431/AI-Student-Councellor).
+      
+    ---
+      
+    ## Contact Us
+    - [LinkedIn](https://www.linkedin.com/in/saif-pasha-59643b197/)
+    - [GitHub](https://github.com/alsaif1431)
+    """
+)
 
 
 async def generate_response(question):
@@ -46,81 +56,51 @@ async def generate_response(question):
     return result
 
 
-st.title("Ai carrer councellor 👩🏻‍🏫")
+st.title("AI Career Counselor 👩🏻‍🏫")
 stop = False
 
 if api_key:
     success_message_html = """
-    <span style='color:green; font-weight:bold;'>✅ Powering the Chatbot using Open AI's 
-    <a href='https://console.groq.com' target='_blank'>Llama 3.3 model</a>!</span>
+    <span style='color:green; font-weight:bold;'>
+        ✅ Powering the Chatbot using Open AI's 
+        <a href='https://console.groq.com' target='_blank'>Llama 3.3 model</a>!
+    </span>
     """
-
-    # Display the success message with the link
     st.markdown(success_message_html, unsafe_allow_html=True)
     openai_api_key = api_key
 else:
-    openai_api_key = st.text_input("Enter your GROQ_API_KEY: ", type="password")
+    openai_api_key = st.text_input("Enter your API_KEY: ", type="password")
     if not openai_api_key:
-        st.warning("Please, enter your GROQ_API_KEY", icon="⚠️")
+        st.warning("Please, enter your API_KEY", icon="⚠️")
         stop = True
     else:
-        st.success("Ask Ai career councellor about guidance!", icon="👉")
-
+        st.success("Ask the AI career counselor for guidance!", icon="👉")
 
 st.markdown(
     """
-# *Ask me about* :
-1. **Top colleges in your state.**
-2. **Top courses to pursue based on your academics.**
-3. **What educational and certification paths should I consider for career advancement?**
-4. **What networking strategies can I employ to build a strong professional network?**
-5. **What is the importance of continuous learning in today's evolving job landscape?**
-
-"""
+    # *Ask me about* :
+    1. **Top colleges in your state.**
+    2. **Top courses to pursue based on your academics.**
+    3. **What educational and certification paths should I consider for career advancement?**
+    4. **What networking strategies can I employ to build a strong professional network?**
+    5. **What is the importance of continuous learning in today's evolving job landscape?**
+    """
 )
-
 
 if stop:
     st.stop()
-
 
 tools = [StoriesTool(), CommentsTool(), ContentTool()]
 msgs = StreamlitChatMessageHistory(key="langchain_messages")
 memory = ConversationBufferMemory(chat_memory=msgs, return_messages=True)
 
 system_message = SystemMessage(
-    content="""
-        You are an expert student counselor who will guide and
-        assist students in their career paths.
-
-        Remember Based on the user question, you will suggest them the best 
-        from the Google searches after searching it n the web first.
-
-        You will never dissatisfy user.
-
-        Remember that your sole purpose is to assist students in making 
-        the best decisions for their careers.
-
-        Be specific and precise in your response.
-        Always be truthful in your answers as it is a matter of student's careers.
-
-        Remember to give the answer in a markdown format and do not overwrite the answer.
-
-        If the user greets you just greet him normally and do not include
-        anything apart from greeting like "Thanks for asking".
-
-        If the user asks for your name, always reply with "AI career counselor".
-        Remeber to say "Thanks for asking" at the end of the answer.
-
-        Remember to return the source link of the answer at the end and don't add
-        duplicate sources link.
-"""
+    content=template
 )
-from student_councellor.utils import Groq_Client
 
 if len(msgs.messages) == 0:
     msgs.add_ai_message(
-        "Hello there, I am the Ai Career councellor. How can I help you?"
+        "Hello there, I am the AI Career Counselor. How can I help you?"
     )
 
 llm = ChatOpenAI()
@@ -140,27 +120,21 @@ open_ai_agent = initialize_agent(
 for msg in msgs.messages:
     st.chat_message(msg.type).write(msg.content)
 
-
 if prompt := st.chat_input(disabled=not openai_api_key):
     st.chat_message("human").write(prompt)
     with st.spinner("Thinking and analyzing ..."):
         response = asyncio.run(generate_response(prompt))
         st.chat_message("ai").write(response)
 
-# Footer
+# Footer with generic information
 footer_html = """
-<div style="text-align: right; margin-right: 10%;">
+<div style="text-align: center; margin: 0px;">
     <p>
-        Copyright © 2024, Trigent Software, Inc. All rights reserved. | 
-        <a href="https://www.facebook.com/TrigentSoftware/" target="_blank">Facebook</a> |
-        <a href="https://www.linkedin.com/company/trigent-software/" target="_blank">LinkedIn</a> |
-        <a href="https://www.twitter.com/trigentsoftware/" target="_blank">Twitter</a> |
-        <a href="https://www.youtube.com/channel/UCNhAbLhnkeVvV6MBFUZ8hOw" target="_blank">YouTube</a>
+        © 2024. All rights reserved.
     </p>
 </div>
 """
 
-# Custom CSS to make the footer sticky
 footer_css = """
 <style>
 .footer {
@@ -172,12 +146,10 @@ footer_css = """
     background-color: white;
     color: black;
     text-align: center;
+    padding: 10px 0;
 }
 </style>
 """
 
-
 footer = f"{footer_css}<div class='footer'>{footer_html}</div>"
-
-# Rendering the footer
 st.markdown(footer, unsafe_allow_html=True)

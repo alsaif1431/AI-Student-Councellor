@@ -1,5 +1,5 @@
 import streamlit as st
-# from langchain_groq.chat_models import ChatGroq
+from langchain_groq.chat_models import ChatGroq
 # from groq import Groq
 from dotenv import load_dotenv
 
@@ -13,6 +13,5 @@ load_dotenv(override=True)
 #     azure_endpoint=st.secrets.get("AZURE_ENDPOINT"),
 # )
 
-# GROQ_API_KEY = st.secrets.get("GROQ_API_KEY")
-Groq_Client = "" 
-# ChatGroq(api_key=GROQ_API_KEY)
+GROQ_API_KEY = st.secrets.get("GROQ_API_KEY")
+Groq_Client =  ChatGroq(api_key=GROQ_API_KEY)
