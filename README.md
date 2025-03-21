@@ -1,13 +1,13 @@
-# AI Career Counselor
+# AI Career Counsellor
 
 ## Introduction
-Welcome to the AI Career Counselor repository! This project serves as a virtual career guidance tool designed to help students explore potential career paths, identify strengths, and make informed decisions about their academic and professional journey.
+Welcome to the AI Career Counsellor repository! This project serves as a virtual career guidance tool designed to help students explore potential career paths, identify strengths, and make informed decisions about their academic and professional journey.
 
 ## Features
-- **Top 10 Career Counseling Questions:** A set of thought-provoking questions to guide students through self-reflection and discussions with a career counselor.
+- **Top 10 Career Counselling Questions:** A set of thought-provoking questions to guide students through self-reflection and discussions with a career counsellor.
 
 ## Getting Started
-To get started with the AI Career Counselor, follow these steps:
+To get started with the AI Career Counsellor, follow these steps:
 
 1. Clone the repository to your local machine:
    ```bash
