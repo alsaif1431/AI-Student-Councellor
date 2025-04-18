@@ -16,7 +16,7 @@ api_key = st.secrets.get("OPENAI_API_KEY")
 if api_key is None:
     raise ValueError(
         "API key not found. Please set the OPENAI_API_KEY environment variable." 
-    )
+    ) 
 
 # Update page configuration with a generic title and favicon
 st.set_page_config(
