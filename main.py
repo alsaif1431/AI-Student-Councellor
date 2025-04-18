@@ -8,7 +8,7 @@ from langchain_community.chat_models.openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory 
 from langchain.schema import SystemMessage
-from langchain.prompts import MessagesPlaceholder 
+from langchain.prompts import MessagesPlaceholder
 
 # Get API key from Streamlit secrets
 api_key = st.secrets.get("OPENAI_API_KEY")
