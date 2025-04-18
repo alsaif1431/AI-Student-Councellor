@@ -6,7 +6,7 @@ from langchain.agents.agent_types import AgentType
 from langchain.agents.initialize import initialize_agent
 from langchain_community.chat_models.openai import ChatOpenAI 
 from langchain.memory import ConversationBufferMemory
-from langchain_community.chat_message_histories import StreamlitChatMessageHistory
+from langchain_community.chat_message_histories import StreamlitChatMessageHistory 
 from langchain.schema import SystemMessage
 from langchain.prompts import MessagesPlaceholder 
 
