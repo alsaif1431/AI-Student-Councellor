@@ -3,7 +3,7 @@
 ## Introduction 
 Welcome to the AI Career Counsellor repository! This project serves as a virtual career guidance tool designed to help students explore potential career paths, identify strengths, and make informed decisions about their academic and professional journey.
 
-## Features
+## Features 
 - **Top 10 Career Counselling Questions:** A set of thought-provoking questions to guide students through self-reflection and discussions with a career counsellor.    
 
 ## Getting Started
