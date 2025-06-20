@@ -1,4 +1,4 @@
-# AI Career Counsellor      
+# AI Career Counsellor       
  
 ## Introduction 
 Welcome to the AI Career Counsellor repository! This project serves as a virtual career guidance tool designed to help students explore potential career paths, identify strengths, and make informed decisions about their academic and professional journey. 
